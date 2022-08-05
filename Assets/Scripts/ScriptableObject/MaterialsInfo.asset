@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _studied: {fileID: 2100000, guid: 3cdadbb4b3d1255479bfc7c8ad8e488c, type: 2}
   _notStudied: {fileID: 2100000, guid: 9fb23dc670db1b54ca8c858eb9056c46, type: 2}
+  _highlight: {fileID: 2100000, guid: beffceb0e1116f94dbbfd60bf9f578e0, type: 2}

@@ -3,7 +3,7 @@ using Array2DEditor;
 
 public abstract class BaseGraphPainter : MonoBehaviour
 {
-    public void DrawGraph(Array2DBool edges, Vertex[] vertices)
+    public void DrawGraph(Array2DBool edges, VertexDFS[] vertices)
     {
         for (int i = 0; i < edges.GridSize.x; i++)
         {

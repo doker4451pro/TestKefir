@@ -6,43 +6,49 @@ using Zenject;
 [RequireComponent(typeof(Vertex))]
 public class InteractedVertex : MonoBehaviour, IPointerClickHandler
 {
-    public Action BecomeChosenAction;
-    public Action StopBeingChosenAction;
-    
+    public Action OnBecomeChosenAction;
+    public Action OnStopBeingChosenAction;
+
+    [Inject] private UIInteract _uiInteract;
     [Inject] private LearningPlayer _player;
 
-    [SerializeField] private int _prise;
-    
-    public int Prise 
+    private Vertex _vertex;
+
+    public Vertex Vertex
     {
-        get
-        {
-            return _prise;
-        }
+        get { return _vertex; }
     }
 
+    private void Awake()
+    {
+        _vertex = GetComponent<Vertex>();
+    }
 
-    #region Player Part
+    public void LearnSkill()
+    {
+        _vertex.BuySkillTo(_player);
+    }
+
+    public void ForgetSkill()
+    {
+        _vertex.SellSkillTo(_player);
+    }
+    
+
+    #region UI Part
     public void BecomeChosen()
     {
-        BecomeChosenAction?.Invoke();
+        OnBecomeChosenAction?.Invoke();
     }
 
     public void StopBeingChosen()
     {
-        StopBeingChosenAction?.Invoke();
+        OnStopBeingChosenAction?.Invoke();
     }
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        _player.ChooseVertex(this);
+        _uiInteract.ChooseVertex(this);
     }
     #endregion
-
-    #region Interface Part
-
-    
-
-    #endregion
-
 }

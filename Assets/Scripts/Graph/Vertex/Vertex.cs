@@ -1,16 +1,55 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Vertex : MonoBehaviour
 {
-    private List<Vertex> _connectedVertices;
+    public Action<VertexState> OnChangeVertexState;
+    
+    [SerializeField] private VertexState state;
+    [SerializeField] private int _price;
 
-    public void SetConnectedVertices(List<Vertex> newConnectedVertices)
+    public int Price 
     {
-        if (_connectedVertices == null)
-            _connectedVertices = newConnectedVertices;
-        else
-            Debug.LogError("_connectedVertices already set");
+        get
+        {
+            return _price;
+        }
+    }
+
+    public VertexState State
+    {
+        get
+        {
+            return state;
+        }
+    }
+
+    public void BuySkill()
+    {
+        ChangeVertexState(VertexState.Studied);
+    }
+
+    public void SellSkill()
+    {
+        ChangeVertexState(VertexState.NotStudied);
+    }
+
+    public void BuySkillTo(LearningPlayer player)
+    {
+        player.LearnSkill(this);
+        ChangeVertexState(VertexState.Studied);
+    }
+
+    public void SellSkillTo(LearningPlayer player)
+    {
+        player.ForgetSkill(this);
+        ChangeVertexState(VertexState.NotStudied);
     }
     
+    private void ChangeVertexState(VertexState newState)
+    {
+        state = newState;
+        OnChangeVertexState?.Invoke(newState);
+
+    }
 }

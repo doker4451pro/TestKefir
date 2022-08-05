@@ -5,6 +5,7 @@ public class MaterialsInfo : ScriptableObject
 {
     [SerializeField] private Material _studied;
     [SerializeField] private Material _notStudied;
+    [SerializeField] private Material _highlight;
 
     public Material Studied 
     {
@@ -19,6 +20,14 @@ public class MaterialsInfo : ScriptableObject
         get
         {
             return _notStudied;
+        }
+    }
+
+    public Material Highlight 
+    {
+        get
+        {
+            return _highlight;
         }
     }
 }
