@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Vertex))]
-public class VertexDFS : MonoBehaviour,IPointerClickHandler
+public class VertexDFS : MonoBehaviour
 {
     [SerializeField] private VertexDFSState _state;
     private Vertex _vertex;
@@ -40,20 +39,23 @@ public class VertexDFS : MonoBehaviour,IPointerClickHandler
         return this;
     }
 
+    //TODO попробовать сделать через ToBase
     public bool CanFindWayToBase()
     {
-        _graph.ResetStateVertices();
-        var way = new List<VertexDFS>();
-        var a=DFS(this,way);
-        foreach (var temp in way)
+        foreach (var vertex in _connectedVertices)
         {
-            Debug.Log(temp);
+            if (vertex._vertex.State == VertexState.Studied)
+            {
+                _graph.ResetStateVertices();
+                _state = VertexDFSState.Visited;
+                if (!DFS(vertex))
+                    return false;
+            }
         }
-
-        return a;
+        return true;
     }
 
-    private bool DFS(VertexDFS vertexDFS,List<VertexDFS> way)
+    private bool DFS(VertexDFS vertexDFS)
     {
         if (vertexDFS._state == VertexDFSState.Base)
             return true;
@@ -61,29 +63,13 @@ public class VertexDFS : MonoBehaviour,IPointerClickHandler
             return false;
 
         vertexDFS._state = VertexDFSState.Visited;
-        
-        foreach (var obj in vertexDFS._connectedVertices)
-        {
-            if (obj._vertex.State == VertexState.Studied && obj._state != VertexDFSState.Visited)
-            {
-                if (DFS(obj,way))
-                {
-                    way.Add(obj);
-                    return true;
-                }
-                else
-                {
-                    way.Remove(obj);
-                    return false;
-                }
-            }
-        }
-        
-        return false;
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log(CanFindWayToBase());
+        foreach (var temp in vertexDFS._connectedVertices)
+        {
+            if (temp._vertex.State == VertexState.Studied && temp._state!=VertexDFSState.Visited)
+                return DFS(temp);
+        }
+
+        return false;
     }
 }
