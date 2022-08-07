@@ -46,6 +46,7 @@ public class Vertex : MonoBehaviour
         ChangeVertexState(VertexState.NotStudied);
     }
     
+    
     private void ChangeVertexState(VertexState newState)
     {
         state = newState;

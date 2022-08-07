@@ -7,21 +7,22 @@ public class Graph : MonoBehaviour
     [SerializeField] private Array2DBool _edges;
     [SerializeField] private VertexDFS[] _vertices;
     [SerializeField] private BaseGraphPainter _painter;
-
-    private void Start()
-    {
-        SetInfoInVertices();
-        _painter.DrawGraph(_edges,_vertices);
-    }
-
+    
     public void ResetStateVertices()
     {
+        _vertices[0].State = VertexDFSState.Base;
         for (int i = 1; i < _vertices.Length; i++)
         {
             _vertices[i].State=VertexDFSState.NotVisited;
         }
     }
 
+    private void Start()
+    {
+        SetInfoInVertices();
+        _painter.DrawGraph(_edges,_vertices);
+    }
+    
     private void SetInfoInVertices()
     {
         for (int i = 0; i < _edges.GridSize.x; i++)
@@ -32,7 +33,7 @@ public class Graph : MonoBehaviour
                 .SetGraph(this);
         }
     }
-
+    
     private List<VertexDFS> GetConnectedVertices(int lineIndex)
     {
         var connectedVertices = new List<VertexDFS>();

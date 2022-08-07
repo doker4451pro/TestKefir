@@ -26,8 +26,8 @@ public class UI : MonoBehaviour
 
     public bool CanLearnSkillFrom(Vertex vertex)
     {
-        //TODO добавить проверку на то есть ли рядом
-        return _player.SkillPoints >= vertex.Price && vertex.State == VertexState.NotStudied;
+        return _player.SkillPoints >= vertex.Price && vertex.State == VertexState.NotStudied &&
+               vertex.GetComponent<VertexDFS>().IsThereStudiedVertexInConnectedVertices();
     }
 
     public bool CanForgetSkillFrom(Vertex vertex)

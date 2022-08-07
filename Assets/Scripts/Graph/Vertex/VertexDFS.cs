@@ -39,14 +39,24 @@ public class VertexDFS : MonoBehaviour
         return this;
     }
 
-    //TODO попробовать сделать через ToBase
+    public bool IsThereStudiedVertexInConnectedVertices()
+    {
+        foreach (var connectedVertex in _connectedVertices)
+        {
+            if (connectedVertex._vertex.State == VertexState.Studied)
+                return true;
+        }
+
+        return false;
+    }
+
     public bool CanFindWayToBase()
     {
+        _graph.ResetStateVertices();
         foreach (var vertex in _connectedVertices)
         {
             if (vertex._vertex.State == VertexState.Studied)
             {
-                _graph.ResetStateVertices();
                 _state = VertexDFSState.Visited;
                 if (!DFS(vertex))
                     return false;
@@ -57,17 +67,25 @@ public class VertexDFS : MonoBehaviour
 
     private bool DFS(VertexDFS vertexDFS)
     {
-        if (vertexDFS._state == VertexDFSState.Base)
+        if (vertexDFS._state == VertexDFSState.Base || vertexDFS._state==VertexDFSState.ToBase)
             return true;
         if (vertexDFS._state == VertexDFSState.Visited)
             return false;
 
         vertexDFS._state = VertexDFSState.Visited;
 
-        foreach (var temp in vertexDFS._connectedVertices)
+        foreach (var connectedVertex in vertexDFS._connectedVertices)
         {
-            if (temp._vertex.State == VertexState.Studied && temp._state!=VertexDFSState.Visited)
-                return DFS(temp);
+            if (connectedVertex._vertex.State == VertexState.Studied && connectedVertex._state != VertexDFSState.Visited)
+            {
+                if (DFS(connectedVertex))
+                {
+                    vertexDFS._state = VertexDFSState.ToBase;
+                    return true;
+                }
+                else
+                    return false;
+            }
         }
 
         return false;

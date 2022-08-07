@@ -1,5 +1,4 @@
 
-
 public enum VertexDFSState
 {
     NotVisited,

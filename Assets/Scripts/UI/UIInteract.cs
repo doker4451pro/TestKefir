@@ -13,36 +13,34 @@ public class UIInteract : MonoBehaviour
         _ui = GetComponent<UI>();
     }
 
-    public void ChooseVertex(InteractedVertex vertex)
-    {
-        if (vertex== null || _selectedVertex == vertex) 
-            return;
-        
-        if(_selectedVertex!=null)
-            _selectedVertex.StopBeingChosen();
-        SelectNewVertex(vertex);
-        _selectedVertex.BecomeChosen();
-    }
-    
     public void OnClickOnGiveSkillPointButton()
     {
         _ui.ChangeSkillPoint();
+        ChooseVertex(null);
     }
 
     public void OnClickOnSkillButton(bool isLearn)
     {
         _ui.ChangeSkillState(_selectedVertex,isLearn);
-        SelectNewVertex(null);
+        ChooseVertex(null);
     }
     
     public void OnClickOnForgetAllButton()
     {
         _ui.ForgetAllSkill();
+        ChooseVertex(null);
     }
-
-    private void SelectNewVertex(InteractedVertex newVertex)
+    
+    public void ChooseVertex(InteractedVertex vertex)
     {
-        _selectedVertex = newVertex;
+        if(_selectedVertex!=null)
+            _selectedVertex.StopBeingChosen();
+        
+        _selectedVertex = vertex;
         OnSelectNewVertex?.Invoke(_selectedVertex);
+        
+        if(_selectedVertex)
+            _selectedVertex.BecomeChosen();
     }
+    
 }
